@@ -1,0 +1,32 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TikTok authorization - Duda Studio</title><link rel="icon" href="icon.png"><link rel="stylesheet" href="style.css"></head><body>
+<header><img src="icon.png" alt="Duda Studio icon"><h1>Duda Studio</h1><div>TikTok authorization callback</div></header>
+<nav><a href="./">Home</a><a href="terms.html">Terms of Service</a><a href="privacy.html">Privacy Policy</a></nav>
+<main>
+<div id="ok" hidden>
+<p>Authorization received. Copy the values below into Duda Studio on your computer. They are shown only in your browser and are not sent anywhere.</p>
+<div class="box"><strong>code</strong><div class="mono" id="code"></div><p><button data-copy="code">Copy code</button></p></div>
+<div class="box"><strong>state</strong><div class="mono" id="state"></div><p><button data-copy="state">Copy state</button></p></div>
+<div class="box"><strong>scopes</strong><div class="mono" id="scopes"></div></div>
+<div class="box"><strong>Full callback URL</strong> <span class="muted">(you can paste this whole URL instead)</span><div class="mono" id="full"></div><p><button data-copy="full">Copy full URL</button></p></div>
+<p class="muted">The authorization code is single-use and expires quickly. Exchange it right away.</p>
+</div>
+<div id="err" hidden class="box"><strong>Authorization failed</strong><p>error: <span class="mono" id="error"></span></p><p>description: <span class="mono" id="error_description"></span></p></div>
+<div id="none" hidden><p>This is the OAuth redirect page for Duda Studio. It shows the <code>code</code> and <code>state</code> returned by TikTok after you authorize the app. No parameters were found in this URL.</p></div>
+</main>
+<script>
+(function(){
+  var p=new URLSearchParams(location.search);
+  function set(id,v){document.getElementById(id).textContent=v||'';}
+  var st0=p.get('state')||'';
+  if(st0.indexOf('ds-local.')===0){location.replace('http://127.0.0.1:5055/oauth/callback'+location.search);return;}
+  if(p.get('error')){set('error',p.get('error'));set('error_description',p.get('error_description'));document.getElementById('err').hidden=false;}
+  else if(p.get('code')){set('code',p.get('code'));set('state',p.get('state'));set('scopes',p.get('scopes'));set('full',location.href);document.getElementById('ok').hidden=false;}
+  else{document.getElementById('none').hidden=false;}
+  document.querySelectorAll('button[data-copy]').forEach(function(b){b.addEventListener('click',function(){
+    var t=document.getElementById(b.dataset.copy).textContent;
+    navigator.clipboard.writeText(t).then(function(){var o=b.textContent;b.textContent='Copied!';setTimeout(function(){b.textContent=o},1500);});
+  });});
+})();
+</script>
+<footer>&copy; 2026 Duda Studio &middot; Operated by Alexandre Melo (Brazil) &middot; <a href="mailto:alexandre.carvalho.melo@gmail.com">alexandre.carvalho.melo@gmail.com</a><br>Duda Studio is an independent personal tool and is not affiliated with or endorsed by TikTok.</footer></body></html>
